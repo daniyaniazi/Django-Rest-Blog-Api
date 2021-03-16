@@ -28,7 +28,7 @@ class PostList(viewsets.ModelViewSet):
 
     def get_object(self, queryset=None, **kwargs):
         item = self.kwargs.get('pk')
-        return get_object_or_404(Post, title=item)
+        return get_object_or_404(Post, slug=item)
 
     # Fired oN ROOT directory
     def get_queryset(self):
