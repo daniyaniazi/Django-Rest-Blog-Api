@@ -2,6 +2,7 @@ from rest_framework import generics, permissions
 from blog.models import Post
 from .serializers import PostSerializer
 from rest_framework.permissions import IsAdminUser, DjangoModelPermissionsOrAnonReadOnly, BasePermission
+from rest_framework import viewsets
 # Create your views here.
 
 
@@ -27,7 +28,7 @@ class PostList(viewsets.ModelViewSet):
 # class PostDetail(generics.RetrieveUpdateDestroyAPIView, PostUserWritePermission):
 
 
-class PostDetail(viewsets.ModelViewSet,PostUserWritePermission):
+class PostDetail(viewsets.ModelViewSet, PostUserWritePermission):
     permission_classes = [PostUserWritePermission]
     queryset = Post.objects.all()
     serializer_class = PostSerializer
