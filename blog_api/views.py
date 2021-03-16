@@ -19,21 +19,37 @@ class PostUserWritePermission(BasePermission):
         return obj.author == request.user
 
 
-# class PostList(generics.ListCreateAPIView):
-class PostList(viewsets.ViewSet):
+class PostList(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
-    queryset = Post.postobjects.all()
-    # serializer_class = PostSerializer
+    #queryset = Post.postobjects.all()
+    serializer_class = PostSerializer
 
-    def list(self, request):
-        serializer_class = PostSerializer(self.queryset, many=True)
-        return Response(serializer_class.data)
+    # When kwargs are present
 
-    # Single item
-    def retrieve(self, request, pk=None):
-        post = get_object_or_404(self.queryset, pk=pk)
-        serializer_class = PostSerializer(post)
-        return Response(serializer_class.data)
+    def get_object(self, queryset=None, **kwargs):
+        item = self.kwargs.get('pk')
+        return get_object_or_404(Post, title=item)
+
+    # Fired oN ROOT directory
+    def get_queryset(self):
+        return Post.objects.all()
+
+
+# # class PostList(generics.ListCreateAPIView):
+# class PostList(viewsets.ViewSet):
+#     permission_classes = [AllowAny]
+#     queryset = Post.postobjects.all()
+#     # serializer_class = PostSerializer
+
+#     def list(self, request):
+#         serializer_class = PostSerializer(self.queryset, many=True)
+#         return Response(serializer_class.data)
+
+#     # Single item
+#     def retrieve(self, request, pk=None):
+#         post = get_object_or_404(self.queryset, pk=pk)
+#         serializer_class = PostSerializer(post)
+#         return Response(serializer_class.data)
 
 
 # class PostDetail(generics.RetrieveUpdateDestroyAPIView, PostUserWritePermission):
