@@ -1,7 +1,7 @@
 from rest_framework import generics, permissions
 from blog.models import Post
 from .serializers import PostSerializer
-from rest_framework.permissions import IsAdminUser, DjangoModelPermissionsOrAnonReadOnly,  AllowAny, BasePermission
+from rest_framework.permissions import IsAdminUser, DjangoModelPermissionsOrAnonReadOnly,  AllowAny, IsAuthenticated, BasePermission
 from rest_framework import viewsets
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
@@ -33,6 +33,24 @@ class PostList(viewsets.ModelViewSet):
     # Fired oN ROOT directory
     def get_queryset(self):
         return Post.objects.all()
+
+
+class UserPostList(generics.ListAPIView):
+    serializer_class = PostSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        return Post.objects.filter(author=user)
+
+
+class PostDetailList(generics.ListAPIView):
+    serializer_class = PostSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        slug = self.kwargs['pk']
+        return Post.objects.filter(slug=slug)
 
 
 # # class PostList(generics.ListCreateAPIView):
