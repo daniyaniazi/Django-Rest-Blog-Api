@@ -53,6 +53,14 @@ class PostDetailList(generics.ListAPIView):
         return Post.objects.filter(slug=slug)
 
 
+class PostDetailQuery(generics.ListAPIView):
+    serializer_class = PostSerializer
+
+    def get_queryset(self):
+        slug = self.request.query_params.get('slug', None)
+        return Post.objects.filter(slug=slug)
+
+
 # # class PostList(generics.ListCreateAPIView):
 # class PostList(viewsets.ViewSet):
 #     permission_classes = [AllowAny]
