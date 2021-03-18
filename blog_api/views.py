@@ -2,7 +2,7 @@ from rest_framework import generics, permissions
 from blog.models import Post
 from .serializers import PostSerializer
 from rest_framework.permissions import IsAdminUser, DjangoModelPermissionsOrAnonReadOnly,  AllowAny, IsAuthenticated, BasePermission
-from rest_framework import viewsets
+from rest_framework import viewsets, filters
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 # Create your views here.
@@ -59,6 +59,17 @@ class PostDetailQuery(generics.ListAPIView):
     def get_queryset(self):
         slug = self.request.query_params.get('slug', None)
         return Post.objects.filter(slug=slug)
+
+
+class PostListDetailFilter(generics.ListAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['^slug']
+    # '^' starts with search
+    # '=' exact match
+    # '@' full text search  (postgress only)
+    # '$' regex search
 
 
 # # class PostList(generics.ListCreateAPIView):
