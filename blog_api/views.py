@@ -72,6 +72,30 @@ class PostListDetailFilter(generics.ListAPIView):
     # '$' regex search
 
 
+class CreatePost(generics.CreateAPIView):
+    serializer_class = PostSerializer
+    permission_classes = [IsAuthenticated]
+    queryset = Post.objects.all()
+
+
+class AdminPostDetail(generics.RetrieveAPIView):
+    serializer_class = PostSerializer
+    permission_classes = [IsAuthenticated]
+    queryset = Post.objects.all()
+
+
+class AdminEditPost(generics.UpdateAPIView):
+    serializer_class = PostSerializer
+    permission_classes = [IsAuthenticated]
+    queryset = Post.objects.all()
+
+
+class AdminDeletePost(generics.RetrieveDestroyAPIView):
+    serializer_class = PostSerializer
+    permission_classes = [IsAuthenticated]
+    queryset = Post.objects.all()
+
+
 # # class PostList(generics.ListCreateAPIView):
 # class PostList(viewsets.ViewSet):
 #     permission_classes = [AllowAny]
